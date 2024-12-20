@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minuteur</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #121212;
+            color: #ffffff;
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+        }
+        h1 {
+            font-size: 3rem;
+            text-shadow: 0 0 10px #ff4500, 0 0 20px #ff4500;
+            margin-bottom: 20px;
+        }
+        input[type="number"] {
+            font-size: 1.5rem;
+            padding: 10px;
+            width: 120px;
+            text-align: center;
+            border: 2px solid #ff4500;
+            border-radius: 5px;
+            background-color: #121212;
+            color: #ffffff;
+            box-shadow: 0 0 10px #ff4500;
+            outline: none;
+        }
+        input[type="number"]::placeholder {
+            color: #ff4500;
+        }
+        input[type="number"]:focus {
+            border-color: #e03e00;
+            box-shadow: 0 0 15px #e03e00;
+        }
+        .button {
+            margin-top: 20px;
+            margin-right: 10px;
+            padding: 10px 20px;
+            font-size: 1.2rem;
+            color: #ffffff;
+            background-color: #ff4500;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            box-shadow: 0 0 10px #ff4500;
+        }
+        .button:hover {
+            background-color: #e03e00;
+        }
+        .clock {
+            margin-top: 20px;
+            font-size: 4rem;
+            font-weight: bold;
+            text-shadow: 0 0 10px #ff4500, 0 0 20px #ff4500;
+        }
+        .nav {
+            margin-top: 30px;
+        }
+        .nav button {
+            margin: 5px;
+            padding: 10px 20px;
+            font-size: 1rem;
+            color: #ffffff;
+            background-color: #ff4500;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            box-shadow: 0 0 10px #ff4500;
+        }
+        .nav button:hover {
+            background-color: #e03e00;
+        }
+    </style>
+    <script>
+        let timerInterval = null;
+        let timerTime = 0;
+
+        function startTimer() {
+            const inputMinutes = parseInt(document.getElementById('timer-input').value, 10) || 0;
+            timerTime = inputMinutes * 60;
+            updateTimerDisplay();
+
+            if (timerInterval) clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                timerTime--;
+                updateTimerDisplay();
+
+                if (timerTime <= 0) {
+                    clearInterval(timerInterval);
+                    alert('Minuteur terminé!');
+                }
+            }, 1000);
+        }
+
+        function stopTimer() {
+            if (timerInterval) {
+                clearInterval(timerInterval);
+                timerInterval = null;
+                alert('Minuteur arrêté.');
+            }
+        }
+
+        function updateTimerDisplay() {
+            document.getElementById('timer').textContent = formatTime(timerTime);
+        }
+
+        function formatTime(seconds) {
+            const mins = Math.floor(seconds / 60).toString().padStart(2, '0');
+            const secs = (seconds % 60).toString().padStart(2, '0');
+            return `${mins}:${secs}`;
+        }
+    </script>
+</head>
+<body>
+    <h1>Minuteur</h1>
+    <input type="number" id="timer-input" placeholder="Minutes" min="0">
+    <div>
+        <button class="button" onclick="startTimer()">Démarrer le minuteur</button>
+        <button class="button" onclick="stopTimer()">Arrêter le minuteur</button>
+    </div>
+    <div id="timer" class="clock">00:00</div>
+    <div class="nav">
+        <button class="button" onclick="window.location.href='index.html'">Horloge</button>
+        <button class="button" onclick="window.location.href='stopwatch.html'">Chronomètre</button>
+        <button class="button" onclick="window.location.href='alarm.html'">Alarme</button>
+    </div>
+</body>
+</html>

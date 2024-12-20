@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Horloge</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #121212;
+            color: #ffffff;
+            font-family: 'Arial', sans-serif;
+        }
+        .clock {
+            font-size: 5rem;
+            font-weight: bold;
+            text-shadow: 0 0 10px #ff4500, 0 0 20px #ff4500;
+        }
+        .date {
+            margin-top: 10px;
+            font-size: 2rem;
+        }
+        .real-clock {
+            margin-bottom: 20px;
+            width: 200px;
+            height: 200px;
+            border: 5px solid #ff4500;
+            border-radius: 50%;
+            position: relative;
+            box-shadow: 0 0 20px #ff4500;
+        }
+        .real-clock .hand {
+            position: absolute;
+            width: 50%;
+            height: 2px;
+            background-color: #ffffff;
+            top: 50%;
+            left: 50%;
+            transform-origin: 0% 50%;
+            transform: rotate(0deg);
+            transition: transform 0.05s linear;
+        }
+        .button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 1rem;
+            color: #ffffff;
+            background-color: #ff4500;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            box-shadow: 0 0 10px #ff4500;
+        }
+        .button:hover {
+            background-color: #e03e00;
+        }
+        .nav {
+            margin-top: 20px;
+        }
+        .nav button {
+            margin: 5px;
+        }
+    </style>
+    <script>
+        const colors = ["#ff4500", "#00ff00", "#0000ff", "#ff69b4", "#ffa500"];
+        let currentColorIndex = 0;
+
+        function updateClock() {
+            const clockElement = document.getElementById('clock');
+            const dateElement = document.getElementById('date');
+            const now = new Date();
+            const timeString = now.toLocaleTimeString();
+            const dateString = now.toLocaleDateString();
+            clockElement.textContent = timeString;
+            dateElement.textContent = dateString;
+
+            const secondsHand = document.getElementById('seconds-hand');
+            const minutesHand = document.getElementById('minutes-hand');
+            const hoursHand = document.getElementById('hours-hand');
+
+            const seconds = now.getSeconds();
+            const minutes = now.getMinutes();
+            const hours = now.getHours();
+
+            secondsHand.style.transform = `rotate(${seconds * 6}deg)`;
+            minutesHand.style.transform = `rotate(${minutes * 6 + seconds / 10}deg)`;
+            hoursHand.style.transform = `rotate(${hours * 30 + minutes / 2}deg)`;
+        }
+
+        function changeColors() {
+            currentColorIndex = (currentColorIndex + 1) % colors.length;
+            const newColor = colors[currentColorIndex];
+
+            document.querySelector('.clock').style.textShadow = `0 0 10px ${newColor}, 0 0 20px ${newColor}`;
+            document.querySelector('.real-clock').style.borderColor = newColor;
+            document.querySelector('.real-clock').style.boxShadow = `0 0 20px ${newColor}`;
+            document.querySelector('.button').style.backgroundColor = newColor;
+            document.querySelector('.button').style.boxShadow = `0 0 10px ${newColor}`;
+
+            localStorage.setItem('currentColorIndex', currentColorIndex);
+        }
+
+        window.onload = () => {
+            const savedColorIndex = localStorage.getItem('currentColorIndex');
+            if (savedColorIndex !== null) {
+                currentColorIndex = parseInt(savedColorIndex, 10);
+                const savedColor = colors[currentColorIndex];
+
+                document.querySelector('.clock').style.textShadow = `0 0 10px ${savedColor}, 0 0 20px ${savedColor}`;
+                document.querySelector('.real-clock').style.borderColor = savedColor;
+                document.querySelector('.real-clock').style.boxShadow = `0 0 20px ${savedColor}`;
+                document.querySelector('.button').style.backgroundColor = savedColor;
+                document.querySelector('.button').style.boxShadow = `0 0 10px ${savedColor}`;
+            }
+            updateClock();
+            setInterval(updateClock, 1000);
+        };
+    </script>
+</head>
+<body>
+    <div class="real-clock">
+        <div id="seconds-hand" class="hand" style="height: 1px; background-color: red;"></div>
+        <div id="minutes-hand" class="hand" style="height: 2px;"></div>
+        <div id="hours-hand" class="hand" style="height: 3px; width: 35%;"></div>
+    </div>
+    <div id="clock" class="clock"></div>
+    <div id="date" class="date"></div>
+
+    <button class="button" onclick="changeColors()">Changer les couleurs</button>
+
+    <div class="nav">
+        <button class="button" onclick="window.location.href='stopwatch.html'">Chronomètre</button>
+        <button class="button" onclick="window.location.href='timer.html'">Minuteur</button>
+        <button class="button" onclick="window.location.href='alarm.html'">Alarme</button>
+    </div>
+</body>
+</html>

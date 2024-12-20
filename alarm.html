@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alarme</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #121212;
+            color: #ffffff;
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+        }
+        h1 {
+            font-size: 3rem;
+            text-shadow: 0 0 10px #ff4500, 0 0 20px #ff4500;
+            margin-bottom: 20px;
+        }
+        input[type="time"] {
+            font-size: 1.5rem;
+            padding: 10px;
+            border: 2px solid #ff4500;
+            border-radius: 5px;
+            background-color: #121212;
+            color: #ffffff;
+            box-shadow: 0 0 10px #ff4500;
+            outline: none;
+        }
+        input[type="time"]::placeholder {
+            color: #ff4500;
+        }
+        input[type="time"]:focus {
+            border-color: #e03e00;
+            box-shadow: 0 0 15px #e03e00;
+        }
+        .button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 1.2rem;
+            color: #ffffff;
+            background-color: #ff4500;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            box-shadow: 0 0 10px #ff4500;
+        }
+        .button:hover {
+            background-color: #e03e00;
+        }
+        .nav {
+            margin-top: 30px;
+        }
+        .nav button {
+            margin: 5px;
+            padding: 10px 20px;
+            font-size: 1rem;
+            color: #ffffff;
+            background-color: #ff4500;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            box-shadow: 0 0 10px #ff4500;
+        }
+        .nav button:hover {
+            background-color: #e03e00;
+        }
+    </style>
+    <script>
+        function setAlarm() {
+            const alarmTime = document.getElementById('alarm-time').value;
+            if (!alarmTime) {
+                alert('Veuillez entrer une heure valide.');
+                return;
+            }
+
+            const now = new Date();
+            const [hours, minutes] = alarmTime.split(':').map(Number);
+            const alarmDate = new Date();
+            alarmDate.setHours(hours, minutes, 0, 0);
+
+            const timeToAlarm = alarmDate - now;
+            if (timeToAlarm > 0) {
+                setTimeout(() => alert('Alarme !'), timeToAlarm);
+                alert(`Alarme programmée pour ${alarmTime}`);
+            } else {
+                alert('Veuillez choisir une heure future.');
+            }
+        }
+    </script>
+</head>
+<body>
+    <h1>Alarme</h1>
+    <input type="time" id="alarm-time" placeholder="HH:MM">
+    <button class="button" onclick="setAlarm()">Programmer l'alarme</button>
+    <div class="nav">
+        <button class="button" onclick="window.location.href='index.html'">Horloge</button>
+        <button class="button" onclick="window.location.href='stopwatch.html'">Chronomètre</button>
+        <button class="button" onclick="window.location.href='timer.html'">Minuteur</button>
+    </div>
+</body>
+</html>
